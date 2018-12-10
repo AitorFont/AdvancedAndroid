@@ -22,11 +22,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements SimpleFragment.OnFragmentInteractionListener {
 
   private Button mButton;
   private boolean isFragmentDisplayed = false;
+  private int mRadioButtonChoice = 2;
 
   static final String STATE_FRAGMENT = "state_of_fragment";
 
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void displayFragment() {
-    SimpleFragment simpleFragment = SimpleFragment.newInstance();
+    SimpleFragment simpleFragment = SimpleFragment.newInstance(mRadioButtonChoice);
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager
@@ -78,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
     // Get the FragmentManager.
     FragmentManager fragmentManager = getSupportFragmentManager();
     // Check to see if the fragment is already showing.
-    SimpleFragment simpleFragment = (SimpleFragment) fragmentManager.findFragmentById(R.id.fragment_container);
+    SimpleFragment simpleFragment =
+        (SimpleFragment) fragmentManager.findFragmentById(R.id.fragment_container);
     if (simpleFragment != null) {
       // Create and commit the transaction to remove the fragment.
       FragmentTransaction fragmentTransaction =
@@ -95,5 +99,13 @@ public class MainActivity extends AppCompatActivity {
     // Save the state of the fragment (true=open, false=closed).
     savedInstanceState.putBoolean(STATE_FRAGMENT, isFragmentDisplayed);
     super.onSaveInstanceState(savedInstanceState);
+  }
+
+  @Override
+  public void onRadioButtonChoice(int choice) {
+    // Keep the radio button choice to pass it back to the fragment.
+    mRadioButtonChoice = choice;
+    Toast.makeText(this, "Choice is " + Integer.toString(choice),
+        Toast.LENGTH_SHORT).show();
   }
 }
